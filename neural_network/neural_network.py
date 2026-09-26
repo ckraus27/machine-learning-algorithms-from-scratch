@@ -256,188 +256,6 @@ def k_cross_validation_evaluation(df, k, layout,learning_rate, ld):
 
     return np.mean(accuracies), np.mean(f1_scores)
 
-def verify_ex1():
-    ld = 0
-
-    print("Regularization parameter lambda=0.000")
-    print()
-    print("Initializing the network with the following structure (number of neurons per layer): [1 2 1]")
-    print()
-
-    print("Initial Theta1 (the weights of each neuron, including the bias weight, are stored in the rows):")
-    print("\t0.40000  0.10000")
-    print("\t0.30000  0.20000")
-    print()
-
-    print("Initial Theta2 (the weights of each neuron, including the bias weight, are stored in the rows):")
-    print("\t0.70000  0.50000  0.60000")
-    print()
-    print()
-
-    print("Training set")
-    print("\tTraining instance 1")
-    print("\t\tx: [0.13000]")
-    print("\t\ty: [0.90000]")
-    print("\tTraining instance 2")
-    print("\t\tx: [0.42000]")
-    print("\t\ty: [0.23000]")
-    print()
-
-    print("-------------------------------------------")
-    print("Computing the error/cost, J, of the network")
-
-    weights = [np.array([[0.4, 0.1], [0.3, 0.2]]), np.array([[0.7, 0.5, 0.6]])]
-
-    layout = [1, 2, 1]
-    neurons = []
-    for i in range(0, len(layout)):
-        if i == len(layout) - 1:
-            neurons.append(np.ones(layout[i]))
-        else:
-            neurons.append(np.ones(1 + layout[i]))
-
-    x  = np.array([0.13])
-    y = 0.90
-
-    neurons, weights = forward(neurons, weights, x)
-    print("Activations:", neurons)
-
-    print("Prediction: ", neurons[-1][0])
-    print("Expected output", y)
-    print("Cost J:", cost(weights, 1, [y], [neurons[-1][0]], ld))
-
-    errors = error_nn(neurons, weights, y)
-    print("delta3:", errors[2])
-    print("delta2:", errors[1][1:])
-
-    gradients = []
-
-    for weight in weights:
-        gradients.append(np.zeros_like(weight))
-
-    gradients = get_gradients_sum(neurons, weights, errors, gradients)
-
-    print("Theta1 gradients: ")
-    print(gradients[0])
-
-    print("Theta2 gradients")
-    print(gradients[1])
-
-    x = np.array([0.42])
-    y = 0.23
-
-    neurons, weights = forward(neurons, weights, x)
-    print("Activations:", neurons)
-    print("Prediction:", neurons[-1][0])
-    print("Expected output", y)
-    print("Cost J:", cost(weights, 1, [y], [neurons[-1][0]], ld))
-
-    errors = error_nn(neurons, weights, y)
-
-    print("delta3:", errors[2])
-    print("delta2:", errors[1][1:])
-
-    gradients1 = []
-
-    for weight in weights:
-        gradients1.append(np.zeros_like(weight))
-
-    gradients1 = get_gradients_sum(neurons, weights, errors, gradients1)
-
-    print("Theta1 gradients: ")
-    print(gradients1[0])
-
-    print("Theta2 gradients")
-    print(gradients1[1])
-    print()
-
-    print("Average gradients: ")
-    print("Theta1: ")
-    print((gradients[0] + gradients1[0]) / 2)
-
-    print("Theta2: ")
-    print((gradients[1] + gradients1[1]) / 2)
-
-def verify_ex2():
-    ld = 0.25
-    weights = [np.array([[0.42, 0.15, 0.40],
-                        [0.72, 0.10, 0.54],
-                        [0.01, 0.19, 0.42],
-                        [0.30, 0.35, 0.68]]
-                        ), 
-               np.array([[0.21, 0.67, 0.14, 0.96, 0.87],
-                        [0.87, 0.42, 0.20, 0.32, 0.89],
-                        [0.03, 0.56, 0.80, 0.69, 0.09]
-                        ]),
-              np.array([[0.04, 0.87, 0.42, 0.53],
-                        [0.17, 0.10, 0.95, 0.69]])]
-    layout = [2, 4, 3, 2]
-    neurons, w = make_nn(layout)
-
-    x = np.array([0.32, 0.68])
-    y = np.array([0.75, 0.98])
-
-    neurons, weights = forward(neurons, weights, x)
-    print("Activations:", neurons)
-    print("Prediction:", neurons[-1])
-    print("Expected output", y)
-    print("Cost J:", cost(weights, 1, [y], [neurons[-1]], ld))
-
-    errors = error_nn(neurons, weights, y)
-
-    print("delta4:", errors[3])
-    print("delta3:", errors[2][1:])
-    print("delta2:", errors[1][1:])
-
-    gradients = []
-
-    for weight in weights:
-        gradients.append(np.zeros_like(weight))
-
-    gradients = get_gradients_sum(neurons, weights, errors, gradients)
-
-    print("Theta1 gradients: ")
-    print(gradients[0])
-
-    print("Theta2 gradients")
-    print(gradients[1])
-
-    print("Theta3 gradients")
-    print(gradients[2])
-    print()
-
-    x = np.array([0.83, 0.02])
-    y = np.array([0.75, 0.28])
-
-    neurons, weights = forward(neurons, weights, x)
-    print("Activations:", neurons)
-    print("Prediction:", neurons[-1])
-    print("Expected output", y)
-    print("Cost J:", cost(weights, 1, [y], [neurons[-1]], ld))
-
-    errors = error_nn(neurons, weights, y)
-
-    print("delta4:", errors[3])
-    print("delta3:", errors[2][1:])
-    print("delta2:", errors[1][1:])
-
-    gradients1 = []
-
-    for weight in weights:
-        gradients1.append(np.zeros_like(weight))
-
-    gradients1 = get_gradients_sum(neurons, weights, errors, gradients1)
-
-    print("Theta1 gradients: ")
-    print(gradients1[0])
-
-    print("Theta2 gradients")
-    print(gradients1[1])
-
-    print("Theta3 gradients")
-    print(gradients1[2])
-    print()
-
 def get_learning_curve(df, layout, learning_rate, ld, sizes):
     df = df.dropna()
     target = df.columns[-1]
@@ -511,11 +329,6 @@ layouts_loan = [[20, 2, 1], [20, 10, 1], [20, 20, 1], [20, 5, 10, 1], [20, 10, 5
 learning_rates = [0.5]
 lds = [0.5]
 
-#layouts_wdbc = [[30, 10, 1], [30, 10, 3, 5, 1], [30, 5, 1], [30, 2, 1], [30, 3, 5, 1], [30, 4, 8, 1]]
-#layouts_loan = [[20, 10, 1], [20, 10, 3, 5, 1], [20, 5, 1], [20, 2, 1], [20, 3, 5, 1], [20, 4, 8, 1]]
-#learning_rates = [1]
-#lds = [0.5]
-
 '''
 for layout in layouts_wdbc:
     for learning_rate in learning_rates:
@@ -532,35 +345,6 @@ for layout in layouts_loan:
             print(f"accuracy = {accuracy:.3f}, F1 score = {f1:.3f}")        
 
 
-
-print("layouts")
-for layout in layouts:
-    accuracy, f1 = k_cross_validation_evaluation(wdbc_df, 5, layout, 0.1, 0.01)
-
-    print(accuracy)
-    print(f1)
-
-#accuracy, f1 = k_cross_validation_evaluation(wdbc_df, 5, [30, 5, 8, 1], 0.1, 0.01)
-
-#print(accuracy)
-#print(f1)
-
-print("learning rates")
-
-for learning_rate in learning_rates:
-    accuracy, f1 = k_cross_validation_evaluation(wdbc_df, 5, [30, 10, 1], learning_rate, 0.01)
-
-    print(accuracy)
-    print(f1)
-
-print("lambdas") 
-
-for ld in lds:
-    accuracy, f1 = k_cross_validation_evaluation(wdbc_df, 5, [30, 10, 1], 1, ld)
-
-    print(accuracy)
-    print(f1)    
-  
 '''
 sizes, cost = get_learning_curve(loan_df, [20, 20, 1], 0.5, 0.5, [5, 10, 20, 50, 100])
 print("sizes: ", sizes)
@@ -572,8 +356,7 @@ plt.xlabel("number of training samples")
 plt.ylabel("J cost")
 plt.savefig("learning_curve_loan.png")
 plt.close()
-#extra credit
-'''
+
 sizes, cost = get_learning_curve(raisin_df, [7, 20, 1], 0.5, 0.5, [5, 10, 20, 50, 100])
 print("sizes: ", sizes)
 print("cost: ", cost)
@@ -584,11 +367,10 @@ plt.xlabel("number of training samples")
 plt.ylabel("J cost")
 plt.savefig("learning_curve_rasin_dataset.png")
 plt.close()
+
+
+
 '''
-
-
-'''
-
 layouts_raisin = [[7, 2, 1], [7, 10, 1], [7, 20, 1], [7, 5, 10, 1], [7, 10, 5, 1], [7, 20, 5, 1], [7, 10, 15, 1]]
 for layout in layouts_raisin:
     for learning_rate in learning_rates:
@@ -606,9 +388,5 @@ for layout in layouts_titanic:
             accuracy, f1 = k_cross_validation_evaluation(titanic_df, 5, layout, learning_rate, ld)
             print(f"layout, learning rate, ld with 50 iterations:  {layout}, {learning_rate}, {ld}")
             print(f"accuracy = {accuracy:.3f}, F1 score = {f1:.3f}") 
+
 '''
-
-
-#functions to verify neural network corrections
-#verify_ex1()
-#verify_ex2()
